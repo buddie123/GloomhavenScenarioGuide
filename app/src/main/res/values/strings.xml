@@ -13,4 +13,7 @@
     <!--content_list_item.xml-->
     <string name="description_loc_sticker">A picture of the sticker for scenario number %1$d!</string>
     <string name="placeholder_location_name">Location Name</string>
+
+    <!--ExpressLookupFragment.java-->
+    <string name="label_express_lookup">Express Lookup</string>
 </resources>
