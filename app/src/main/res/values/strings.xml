@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">GloomhavenScenarioGuide</string>
     <string name="action_settings">Settings</string>
+
+    <!--fragment_express_lookup.xml-->
+    <string name="placeholder_selection_title">SelectionTitle</string>
+    <string name="description_nav_left">Navigate left to the next screen</string>
+    <string name="description_nav_right">Navigate right to the next screen</string>
+    <string name="label_main_toggle_button">Main Quests</string>
+    <string name="label_side_toggle_button">Side Quests</string>
+    <string name="label_both_toggle_button">Both</string>
+
+    <!--content_list_item.xml-->
+    <string name="description_loc_sticker">A picture of the sticker for scenario number %1$d!</string>
+    <string name="placeholder_location_name">Location Name</string>
 </resources>
