@@ -115,7 +115,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
             try{
-                InputStream inputStream = getActivity().getAssets().open("sticker1_150.png");
+                InputStream inputStream = getActivity().getAssets().open("sticker" + position + ".png");
                 Drawable image = Drawable.createFromStream(inputStream, null);
                 myViewHolder.locSticker.setImageDrawable(image);
             }
