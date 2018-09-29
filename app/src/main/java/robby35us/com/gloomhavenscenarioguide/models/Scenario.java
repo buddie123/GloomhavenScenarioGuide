@@ -1,8 +1,14 @@
 package robby35us.com.gloomhavenscenarioguide.models;
 
+import android.support.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Scenario {
 
     public static final int TOTAL_NUM_SCENARIOS = 96;
+    public static final int NUM_OF_FIRST_SIDE_QUEST = 52;
     private static String[] scenarioNames = new String[]{
             "0 Gloomhaven"
             ,"1 Black Barrow"
@@ -101,6 +107,25 @@ public class Scenario {
             ,"94 Vermling Nest"
             ,"95 Payment Due"};
 
+
+    public static List<String> bothScenarioNames;
+    public static List<String> mainScenarioNames;
+    public static List<String> sideScenarioNames;
+
+    static {
+        bothScenarioNames = new ArrayList<>(96);
+        mainScenarioNames = new ArrayList<>(NUM_OF_FIRST_SIDE_QUEST);
+        int i = 0;
+        for (; i < NUM_OF_FIRST_SIDE_QUEST; i++) {
+            bothScenarioNames.add(scenarioNames[i]);
+            mainScenarioNames.add(scenarioNames[i]);
+        }
+        sideScenarioNames = new ArrayList<>(TOTAL_NUM_SCENARIOS - NUM_OF_FIRST_SIDE_QUEST);
+        for (; i < TOTAL_NUM_SCENARIOS; i++) {
+            bothScenarioNames.add(scenarioNames[i]);
+            sideScenarioNames.add(scenarioNames[i]);
+        }
+    }
     private static Scenario[] scenarios = new Scenario[TOTAL_NUM_SCENARIOS];
 
     private String name;
@@ -113,6 +138,7 @@ public class Scenario {
         return name;
     }
 
+    @Nullable
     public static Scenario getScenario(int number) {
         if (number < 0 || number >= TOTAL_NUM_SCENARIOS) {
             return null;
