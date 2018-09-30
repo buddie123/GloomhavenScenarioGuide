@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Scenario {
 
-    public static final int TOTAL_NUM_SCENARIOS = 96;
+    public static final int TOTAL_NUM_SCENARIOS = 95;
+    public static final int NUM_OF_FIRST_QUEST = 1;
     public static final int NUM_OF_FIRST_SIDE_QUEST = 52;
     private static String[] scenarioNames = new String[]{
             "0 Gloomhaven"
@@ -113,15 +114,15 @@ public class Scenario {
     public static List<String> sideScenarioNames;
 
     static {
-        bothScenarioNames = new ArrayList<>(96);
+        bothScenarioNames = new ArrayList<>(TOTAL_NUM_SCENARIOS);
         mainScenarioNames = new ArrayList<>(NUM_OF_FIRST_SIDE_QUEST);
-        int i = 0;
+        int i = NUM_OF_FIRST_QUEST;
         for (; i < NUM_OF_FIRST_SIDE_QUEST; i++) {
             bothScenarioNames.add(scenarioNames[i]);
             mainScenarioNames.add(scenarioNames[i]);
         }
-        sideScenarioNames = new ArrayList<>(TOTAL_NUM_SCENARIOS - NUM_OF_FIRST_SIDE_QUEST);
-        for (; i < TOTAL_NUM_SCENARIOS; i++) {
+        sideScenarioNames = new ArrayList<>(TOTAL_NUM_SCENARIOS - NUM_OF_FIRST_SIDE_QUEST + 1);
+        for (; i < scenarioNames.length; i++) {
             bothScenarioNames.add(scenarioNames[i]);
             sideScenarioNames.add(scenarioNames[i]);
         }
@@ -140,7 +141,7 @@ public class Scenario {
 
     @Nullable
     public static Scenario getScenario(int number) {
-        if (number < 0 || number >= TOTAL_NUM_SCENARIOS) {
+        if (number < NUM_OF_FIRST_QUEST || number > TOTAL_NUM_SCENARIOS) {
             return null;
         }
         else if(scenarios[number] == null) {

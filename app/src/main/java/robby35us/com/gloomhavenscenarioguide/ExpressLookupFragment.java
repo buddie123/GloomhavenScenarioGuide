@@ -47,9 +47,9 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
         ImageButton navRightButton = view.findViewById(R.id.navRightButton);
         navRightButton.setVisibility(View.INVISIBLE);
 
-        mainOnlyAdapter = new MyRecyclerViewAdapter(Scenario.mainScenarioNames);
-        sideOnlyAdapter = new MyRecyclerViewAdapter(Scenario.sideScenarioNames);
-        bothAdapter = new MyRecyclerViewAdapter(Scenario.bothScenarioNames);
+        mainOnlyAdapter = new MyRecyclerViewAdapter(Scenario.mainScenarioNames, Scenario.NUM_OF_FIRST_QUEST);
+        sideOnlyAdapter = new MyRecyclerViewAdapter(Scenario.sideScenarioNames, Scenario.NUM_OF_FIRST_SIDE_QUEST);
+        bothAdapter = new MyRecyclerViewAdapter(Scenario.bothScenarioNames, Scenario.NUM_OF_FIRST_QUEST);
 
         recyclerView = view.findViewById(R.id.selectionsRV);
         recyclerView.setAdapter(bothAdapter);
@@ -97,11 +97,13 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
 
     class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.MyViewHolder> {
         private List<String> locNames;
+        private int locationOffset;
 
 
-        public MyRecyclerViewAdapter(List<String> locNames) {
+        public MyRecyclerViewAdapter(List<String> locNames, int locationOffset) {
             this.locNames = new ArrayList<>(locNames.size());
             this.locNames.addAll(locNames);
+            this.locationOffset = locationOffset;
         }
 
         @NonNull
@@ -115,7 +117,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
             try{
-                InputStream inputStream = getActivity().getAssets().open("sticker" + position + ".png");
+                InputStream inputStream = getActivity().getAssets().open("sticker" + (locationOffset + position) + ".png");
                 Drawable image = Drawable.createFromStream(inputStream, null);
                 myViewHolder.locSticker.setImageDrawable(image);
             }
