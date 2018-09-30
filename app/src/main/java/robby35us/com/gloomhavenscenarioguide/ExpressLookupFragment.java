@@ -25,6 +25,7 @@ import robby35us.com.gloomhavenscenarioguide.models.Scenario;
  * A placeholder fragment containing a simple view.
  */
 public class ExpressLookupFragment extends Fragment implements View.OnClickListener {
+
     private ToggleButton mainToggleButton;
     private ToggleButton sideToggleButton;
     private ToggleButton bothToggleButton;
@@ -33,6 +34,35 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
     private MyRecyclerViewAdapter mainOnlyAdapter;
     private MyRecyclerViewAdapter sideOnlyAdapter;
     private MyRecyclerViewAdapter bothAdapter;
+
+    private int lastMainOnlyPosition = 0;
+    private int lastSideOnlyPosition = 0;
+    private int lastBothPosition = 0;
+
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int firstPositionVisible = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+            MyRecyclerViewAdapter adapter = (MyRecyclerViewAdapter) recyclerView.getAdapter();
+            if(dy == 0)
+                return;
+            if(adapter == mainOnlyAdapter) {
+                 lastMainOnlyPosition = firstPositionVisible;
+            }
+            else if(adapter == sideOnlyAdapter) {
+                lastSideOnlyPosition = firstPositionVisible;
+            }
+            else if(adapter == bothAdapter) {
+                lastBothPosition = firstPositionVisible;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(@NonNull  LayoutInflater inflater, ViewGroup container,
@@ -54,6 +84,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
         recyclerView = view.findViewById(R.id.selectionsRV);
         recyclerView.setAdapter(bothAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.addOnScrollListener(onScrollListener);
 
         mainToggleButton = view.findViewById(R.id.mainToggleButton);
         mainToggleButton.setOnClickListener(this);
@@ -77,6 +108,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
                 bothToggleButton.setBackgroundResource(R.drawable.toggle_button_off);
                 recyclerView.setAdapter(mainOnlyAdapter);
                 recyclerView.invalidate();
+                recyclerView.scrollToPosition(lastMainOnlyPosition);
                 break;
             case R.id.sideToggleButton:
                 mainToggleButton.setBackgroundResource(R.drawable.toggle_button_off);
@@ -84,6 +116,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
                 bothToggleButton.setBackgroundResource(R.drawable.toggle_button_off);
                 recyclerView.setAdapter(sideOnlyAdapter);
                 recyclerView.invalidate();
+                recyclerView.scrollToPosition(lastSideOnlyPosition);
                 break;
             case R.id.bothToggleButton:
                 mainToggleButton.setBackgroundResource(R.drawable.toggle_button_off);
@@ -91,6 +124,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
                 bothToggleButton.setBackgroundResource(R.drawable.toggle_button_on);
                 recyclerView.setAdapter(bothAdapter);
                 recyclerView.invalidate();
+                recyclerView.scrollToPosition(lastBothPosition);
                 break;
         }
     }
@@ -100,7 +134,7 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
         private int locationOffset;
 
 
-        public MyRecyclerViewAdapter(List<String> locNames, int locationOffset) {
+        MyRecyclerViewAdapter(List<String> locNames, int locationOffset) {
             this.locNames = new ArrayList<>(locNames.size());
             this.locNames.addAll(locNames);
             this.locationOffset = locationOffset;
@@ -117,7 +151,9 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
             try{
-                InputStream inputStream = getActivity().getAssets().open("sticker" + (locationOffset + position) + ".png");
+                InputStream inputStream = null;
+                if(getActivity()!= null)
+                    inputStream = getActivity().getAssets().open("sticker" + (locationOffset + position) + ".png");
                 Drawable image = Drawable.createFromStream(inputStream, null);
                 myViewHolder.locSticker.setImageDrawable(image);
             }
@@ -132,11 +168,11 @@ public class ExpressLookupFragment extends Fragment implements View.OnClickListe
             return locNames.size();
         }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
+        class MyViewHolder extends RecyclerView.ViewHolder {
             final ImageView locSticker;
             final TextView locName;
 
-            public MyViewHolder(View view) {
+            MyViewHolder(View view) {
                 super(view);
                 locSticker = view.findViewById(R.id.locSticker);
                 locName = view.findViewById(R.id.locName);
